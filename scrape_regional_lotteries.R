@@ -38,3 +38,6 @@ pa_df %>%
       game == "Treasure Hunt" ~ gsub("(.{2})", "\\1 ", numbers)
     )
   )
+
+# Write out the scraped data
+write.csv(pa_df,'lotteries.csv',row.names = FALSE)
