@@ -30,7 +30,7 @@ pa_df <- tibble(
   numbers = pa_numbers
 )
 
-pa_df %>% 
+stringr <- pa_df %>% 
   filter(grepl("PICK|Treasure Hunt", game)) %>% 
   mutate(
     numbers = case_when(
