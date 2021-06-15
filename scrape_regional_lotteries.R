@@ -1,22 +1,40 @@
-# Scrapes executive orders signed by the governor and turns them into structured data for use by the TrentonTracker API
-
+# Scrapes regional lottery numbers
 library(rvest)
 library(dplyr)
-library(lubridate)
+library(stringr)
 
-cat("Downloading Executive Order data...")
-# Get governor's EO website
-content <- read_html('https://nj.gov/infobank/eo/056murphy/approved/eo_archive.html') %>%
-  html_table(fill = TRUE, header = TRUE)
 
-# Construct a data frame from the scraped table, parse the dates
-execorders <- data.frame(number = content[[1]][1], subject = content[[1]][2], date = content[[1]][3]) %>% 
-  rename('Number' = 'No.') %>% mutate(Date.Issued = ymd(Date.Issued)) %>% 
-  rename('Date' = "Date.Issued")
+# PA Lottery
+cat("Downloading PA lottery nummers...")
 
-# Generate URL for full text download EO-77.pdf
-baseurl <- "https://nj.gov/infobank/eo/056murphy/pdf/"
-execorders$URL <- paste0(baseurl,"EO-",execorders$Number,".pdf")
+pa_html <- read_html("https://www.palottery.state.pa.us/Print-Winning-Numbers.aspx?print=1")
 
-# Write out the scraped data
-write.csv(execorders,'execorders.csv',row.names = FALSE)
+pa_games <- pa_html %>% 
+  html_nodes("li.stretch .logo-section img") %>% 
+  html_attr("alt")
+
+
+pa_dates <- pa_html %>% 
+  html_nodes("li.stretch .holder .date") %>% 
+  html_text()
+
+pa_numbers <- pa_html %>%
+  html_nodes("li.stretch .holder ul.circle-list") %>% 
+  html_text() %>% 
+   gsub("\r|\n|\t|\\s", "", .)
+
+pa_df <- tibble(
+  date = as.Date(pa_dates, format="%m-%d-%y"),
+  state = "PA",
+  game = pa_games,
+  numbers = pa_numbers
+)
+
+pa_df %>% 
+  filter(grepl("PICK|Treasure Hunt", game)) %>% 
+  mutate(
+    numbers = case_when(
+      grepl("PICK", game) ~ paste(str_sub(numbers, 1, -2), str_sub(numbers, -1, -1), sep=', Wild Ball '),
+      game == "Treasure Hunt" ~ gsub("(.{2})", "\\1 ", numbers)
+    )
+  )
