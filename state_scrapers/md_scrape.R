@@ -7,6 +7,7 @@ md_html <- read_html("https://www.mdlottery.com/player-tools/winning-numbers/#me
 
 md_list <- list()
 
+#Multi-match
 md_list[[length(md_list) + 1]] <- md_html %>% 
   html_node("#table_multi-match") %>% 
   html_table() %>% 
@@ -25,6 +26,7 @@ md_list[[length(md_list) + 1]] <- md_html %>%
     numbers
   )
 
+#Pick 3
 md_list[[length(md_list) + 1]] <- md_html %>% 
   html_node("#table_pick-3-4") %>% 
   html_table() %>% 
@@ -49,6 +51,7 @@ md_list[[length(md_list) + 1]] <- md_html %>%
     numbers
   )
 
+#Pick 4
 md_list[[length(md_list) + 1]] <- md_html %>% 
   html_node("#table_pick-3-4") %>% 
   html_table() %>% 
@@ -73,6 +76,7 @@ md_list[[length(md_list) + 1]] <- md_html %>%
     numbers
   )
 
+#Bonus Match 5
 md_list[[length(md_list) + 1]] <- md_html %>% 
   html_node("#table_bonus-match-5") %>% 
   html_table() %>% 
@@ -90,13 +94,14 @@ md_list[[length(md_list) + 1]] <- md_html %>%
     numbers
   )
 
+#Cash4Life
 md_list[[length(md_list) + 1]] <- md_html %>% 
   html_node("#table_cash-4-life") %>% 
   html_table() %>% 
   head(1) %>%
   rename(date = Date, numbers = `Winning Numbers`) %>% 
   mutate(
-    game = "Cash 4 Life",
+    game = "Cash4Life",
     state = "MD",
     date = as.Date(date, format="%m/%d/%y"),
     numbers = paste(gsub(" \\+ ", ", ", numbers), " Cash Ball ", `Cash Ball`, sep="")
