@@ -40,4 +40,4 @@ jobs:
         env:
           CDN_AUTH: ${{ secrets.CDN_AUTH }}
           GCP_PROJECT: "s2-quiz-prod"
-        run: ./scripts/update-gcs.sh
+        run: ./update-gcs.sh
