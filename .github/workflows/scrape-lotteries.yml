@@ -27,3 +27,17 @@ jobs:
           git add -A
           git commit -m 'New lottery numbers - data updated!' || echo "No changes to commit"
           git push origin || echo "No changes to commit"
+       # configure gcloud and gsutil
+      - name: GCloud setup
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: "325.0.0"
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Cache
+        env:
+          CDN_AUTH: ${{ secrets.CDN_AUTH }}
+          GCP_PROJECT: "s2-quiz-prod"
+        run: ./scripts/update-gcs.sh
