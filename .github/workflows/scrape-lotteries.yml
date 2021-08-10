@@ -36,8 +36,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Cache
+      - name: Update
         env:
           CDN_AUTH: ${{ secrets.CDN_AUTH }}
-          GCP_PROJECT: "s2-quiz-prod"
         run: ./update-gcs.sh
