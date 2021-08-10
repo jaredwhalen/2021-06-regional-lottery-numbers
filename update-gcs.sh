@@ -6,7 +6,7 @@ set -e
 
 CDN_AUTH=$(echo $CDN_AUTH | base64 --decode)
 
-CDN_SPACE="gs://delaware-online/datasets/"
+CDN_SPACE="gs://delaware-online/datasets"
 PUBLIC_PATH="https://www.gannett-cdn.com/delaware-online/datasets"
 CDN_PATH="https://$CDN_AUTH@www.gannett-cdn.com/delaware-online/datasets"
 
