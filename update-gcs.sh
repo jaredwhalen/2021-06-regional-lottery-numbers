@@ -4,17 +4,16 @@
 
 set -e
 
-PROJECT=${1:-"lotteries"}
-
 CDN_AUTH=$(echo $CDN_AUTH | base64 --decode)
-BUCKET=${BUCKET:-"production"}
 
-CDN_SPACE="gs://delaware-online/storytelling-embeds/$BUCKET/projects"
-PUBLIC_PATH="https://www.gannett-cdn.com/delaware-online/storytelling-embeds/$BUCKET/projects"
-CDN_PATH="https://$CDN_AUTH@www.gannett-cdn.com/delaware-online/storytelling-embeds/$BUCKET/projects"
-FILENAME="2021-08-lotteries"
+CDN_SPACE="gs://delaware-online/datasets/"
+PUBLIC_PATH="https://www.gannett-cdn.com/delaware-online/datasets"
+CDN_PATH="https://$CDN_AUTH@www.gannett-cdn.com/delaware-online/datasets"
 
-gsutil cp "lotteries.csv" "$CDN_SPACE/$FILENAME"
-gsutil acl set public-read "$CDN_SPACE/$FILENAME"
+FILENAME="lotteries.csv"
+PROJECT="lotteries"
 
-curl -X PURGE --user "$CDN_AUTH" "$PUBLIC_PATH/$FILENAME"
+gsutil cp "$FILENAME" "$CDN_SPACE/$PROJECT"
+gsutil acl set public-read "$CDN_SPACE/$PROJECT"
+
+curl -X PURGE --user "$CDN_AUTH" "$PUBLIC_PATH/$PROJECT"
