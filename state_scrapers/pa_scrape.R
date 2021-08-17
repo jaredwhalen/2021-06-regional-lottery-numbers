@@ -55,4 +55,4 @@ for (node in nodes) {
 }
 
 # bind rows into new dataframe
-pa_df <- bind_rows(pa_list)
+pa_df <- bind_rows(pa_list) %>%  filter(!game %in% c("Mega Millions", "Powerball"))
